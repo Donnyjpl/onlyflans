@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Inicio - OnlyFlans{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center m-4">Productos Disponibles:</h2>
+    <div class="row">
+        {% for producto in productos %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card h-100">
+                <img src="{{ producto.image_url }}" class="card-img-top img-fluid" alt="Imagen de {{ producto.name }}">
+                <div class="card-body">
+                    <h5 class="card-title text-center">{{ producto.name|title }}</h5>
+                    <p class="card-text">{{ producto.description|truncatechars:100 }}</p>
+                    <!-- Puedes ajustar el número de caracteres según tu preferencia -->
+                    <!-- Puedes agregar más detalles o acciones aquí si es necesario -->
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+

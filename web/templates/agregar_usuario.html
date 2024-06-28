@@ -1,0 +1,19 @@
+<!-- en templates/agregar_usuario.html -->
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}agregar Usuario - OnlyFlans{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Agregar Usuario</h2>
+    <form method="post" class="usuario-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Guardar Usuario</button>
+    </form>
+
+
+
+{% endblock %}

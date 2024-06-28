@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Bienvenido - OnlyFlans{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="main-heading">Bienvenido: {{ user.get_username|upper }}</h1>
+    
+        <p class="intro-paragraph">Si quiere conocer más de nuestros productos, sugerencias y  reclamos, puede
+            hacerlo <a href="{% url 'contacto' %}" class="contact-link">aquí</a>.</p>
+ 
+    <h2 class="text-center mt-4">Productos Disponibles</h2>
+    <div class="row">
+        {% for producto in productos %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card h-100">
+                <img src="{{ producto.image_url }}" class="card-img-top" alt="Imagen de {{ producto.name }}">
+                <div class="card-body">
+                    <h5 class="card-title text-center">{{ producto.name|title }}</h5>
+                    <p class="card-text">{{ producto.description|truncatechars:100 }}</p>
+                    <!-- Puedes ajustar el número de caracteres según tu preferencia -->
+                    <!-- Puedes agregar más detalles o acciones aquí si es necesario -->
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

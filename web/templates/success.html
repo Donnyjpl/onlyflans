@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Éxito - OnlyFlans{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h2>Gracias por contactarte con OnlyFlans</h2>
+            <p>Te responderemos en breve.</p>
+            <a href="{% url 'inicio' %}" class="btn btn-primary">Volver a la página principal</a>
+            <a href="{% url 'bienvenido' %}" class="btn btn-primary">Volver a la página Bienvenida</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+<div class="container">
+    <h2 class="text-center mb-4">Productos Disponibles</h2>
+    <div class="row justify-content-center">
+        {% for producto in productos %}
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card h-100">
+                <img src="{{ producto.image_url }}" class="card-img-top" alt="Imagen de {{ producto.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ producto.name }}</h5>
+                    <p class="card-text">{{ producto.description|truncatechars:100 }}</p>
+                    <!-- Puedes ajustar el número de caracteres según tu preferencia -->
+                    <!-- Puedes agregar más detalles o acciones aquí si es necesario -->
+                </div>
+            </div>
+        </div>
