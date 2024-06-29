@@ -1,5 +1,5 @@
 from django import forms
-from .models import Flan, ContactForm,Usuario
+from .models import Flan, Contacto,Usuario
 
 class FlanForm(forms.ModelForm):
     class Meta:
@@ -12,9 +12,9 @@ class FlanForm(forms.ModelForm):
             'image_url': 'URL de la Imagen',
             'is_private': '¿Es privado?',
         }
-class ContactFormForm(forms.ModelForm):
+class ContactoForm(forms.ModelForm):
     class Meta:
-        model = ContactForm
+        model = Contacto
         fields = ['customer_name','customer_email', 'message']
         labels = {
             'customer_name': 'Nombre:',
@@ -25,11 +25,6 @@ class ContactFormForm(forms.ModelForm):
             'message': forms.Textarea(attrs={'cols': 30, 'rows': 3}),  # Ajusta el tamaño del TextArea
         }
         
-        
-class ContactFormModelForm(forms.ModelForm):
-    class Meta:
-        model = ContactForm
-        fields = ['customer_email', 'customer_name', 'message']
       
 class UsuarioForm(forms.ModelForm):
     password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
@@ -61,3 +56,7 @@ class UsuarioForm(forms.ModelForm):
         user.set_password(self.cleaned_data["password1"])  # Utiliza set_password para guardar la contraseña de manera segura
         if commit:
             user.save()
+            
+class LoginForm(forms.Form):
+    username = forms.CharField(label='Nombre de usuario')
+    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput)

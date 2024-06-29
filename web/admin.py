@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Flan, ContactForm,Usuario
+from .models import Flan, Contacto,Usuario
 
 # Asegúrate de importar correctamente tu modelo Flan
 
@@ -9,7 +9,7 @@ class FlanAdmin(admin.ModelAdmin):
     search_fields = ('name', 'description')  # Campos por los cuales se puede buscar
 
 # No olvides registrar tus modelos aquí si es necesario
-@admin.register(ContactForm)
+@admin.register(Contacto)
 class ContactFormAdmin(admin.ModelAdmin):
     list_display = ('customer_email', 'customer_name','message')
     search_fields = ('customer_email', 'customer_name')

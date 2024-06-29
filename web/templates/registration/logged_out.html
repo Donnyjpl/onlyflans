@@ -1,13 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sesión Cerrada</title>
-</head>
-<body>
-    <h1>Sesión Cerrada</h1>
-    <p>Has cerrado sesión exitosamente.</p>
-    <a href="{% url 'home' %}">Ir al Inicio</a>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}Sesión Cerrada - OnlyFlans{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title text-center">Sesión Sesión</h1>
+                    <p>Has cerrado sesión exitosamente.</p>
+                    <a href="{% url 'inicio' %}">Ir al Inicio</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

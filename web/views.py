@@ -1,16 +1,19 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponseRedirect,HttpResponseForbidden
-from .forms import FlanForm,ContactFormForm,UsuarioForm
-from .models import Flan
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.http import HttpResponseRedirect,HttpResponseForbidden
+from .forms import FlanForm,UsuarioForm,LoginForm,ContactoForm
+from .models import Flan
+
 
 # Create your views here.
 
 def inicio(request):
-    # Aquí podrías obtener los productos desde la base de datos
+    
     flanes_publicos = Flan.objects.filter(is_private=False)
     context = {
-        'productos': flanes_publicos
+         'productos': flanes_publicos
     }
     return render(request, 'index.html', context)
 
@@ -35,15 +38,11 @@ def acerca(request):
 
 @login_required
 def bienvenido(request):
-    if not request.user.is_authenticated:
-        return HttpResponseForbidden("Esta página está protegida. Necesitas iniciar sesión.")
-    
     flanes_privados = Flan.objects.filter(is_private=True)
     context = {
         'productos': flanes_privados
     }
     return render(request, 'bienvenido.html', context)
-
 
 def create_flan(request):
     if request.method == 'POST':
@@ -58,18 +57,17 @@ def create_flan(request):
 
 def contacto(request):
     if request.method == 'POST':
-        form = ContactFormForm(request.POST)
-        if form.is_valid():
-            form.save()  # Guarda el formulario en la base de datos si es válido
+        formm = ContactoForm(request.POST)
+        if formm.is_valid():
+            formm.save()  # Guarda el formulario en la base de datos si es válido
             return HttpResponseRedirect('../success/')  # Redirige a donde sea apropiado después de enviar el formulario
     else:
-        form = ContactFormForm()
+        formm= ContactoForm()
 
-    return render(request, 'contacto.html', {'form': form})
+    return render(request, 'contacto.html', {'formm': formm})
 
 def success(request):
     return render(request, 'success.html')
-
 
 def add_user(request):
     if request.method == 'POST':
@@ -83,3 +81,22 @@ def add_user(request):
 
 def registro_exitoso(request):
     return render(request, 'registro_exitoso.html')
+
+def custom_login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                # Redirect to a success page.
+                return redirect('bievenido')  # Cambia 'home' por el nombre de tu URL de página principal
+            else:
+                messages.error(request, 'Usuario o contraseña incorrectos.')
+    else:
+        form = LoginForm()
+    return render(request, 'registration/login.html', {'form': form})
+
+

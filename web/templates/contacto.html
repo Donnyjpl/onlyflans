@@ -12,22 +12,24 @@
                     <h2 class="card-title text-center mb-4">Formulario de Contacto</h2>
                     <form method="post">
                         {% csrf_token %}
-                        
-                        <!-- Iteración sobre los campos del formulario -->
-                        {% for field in form %}
-                            <div class="mb-3">
-                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                                {{ field }}
-                                {% if field.help_text %}
-                                    <small class="form-text text-muted">{{ field.help_text }}</small>
-                                {% endif %}
-                                {% for error in field.errors %}
-                                    <div class="alert alert-danger">{{ error }}</div>
-                                {% endfor %}
+                        <div class="row text-auto">
+                            <!-- Aplicando clases de Bootstrap a los campos del formulario -->
+                            <div class="form-group mb-3">
+                                {{ formm.customer_name.label_tag }}
+                                {{ formm.customer_name }}
                             </div>
-                        {% endfor %}
-                        
-                        <button type="submit" class="btn btn-primary d-block mx-auto mt-4">Enviar</button>
+                            <div class="form-group mb-3">
+                                {{ formm.customer_email.label_tag }}
+                                {{ formm.customer_email }}
+                            </div>
+                            <div class="form-group mb-3">
+                                {{ formm.message.label_tag }}
+                                {{ formm.message }}
+                            </div>
+                            <div class="form-group mb-3">
+                                <button type="submit" class="btn btn-primary btn-sm">Enviar</button>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>

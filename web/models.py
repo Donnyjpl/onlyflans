@@ -2,7 +2,6 @@ from django.db import models
 from django.utils.text import slugify 
 import uuid
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.hashers import make_password, check_password
 
 # Create your models here.
 
@@ -22,7 +21,7 @@ class Flan(models.Model):
         return self.name
     
     
-class ContactForm(models.Model):
+class Contacto(models.Model):
     contact_form_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     customer_name = models.CharField(max_length=64)
     customer_email = models.EmailField()
@@ -53,8 +52,3 @@ class Usuario(AbstractUser):
     )
     def __str__(self):
         return self.username 
-    def set_clave(self, raw_password):
-        self.clave = make_password(raw_password)
-
-    def check_clave(self, raw_password):
-        return check_password(raw_password, self.clave)   
