@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Opiniones - OnlyFlans{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="main-heading">Comentarios de: {{ producto.name }}</h1> 
+    <img src="{{ producto.image_url }}" width="400" alt="Imagen de {{ producto.name }}">
+    <hr>
+
+    <!-- Mostrar las opiniones existentes si las hay -->
+    <div class="row">
+        <div class="col-md-8">
+            {% if opiniones %}
+            <div class="card">
+                <div class="card-body">
+                    <h3>Comentarios existentes:</h3>
+                    <ul class="list-group list-group-flush">
+                        {% for opinion in opiniones %}
+                        <li class="list-group-item">
+                            <strong>{{ opinion.nombre_cliente|upper }}</strong>: {{ opinion.opinion|title }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% else %}
+            <p>No hay Comentarios todavía.</p>
+            {% endif %}
+        </div>
+
+        <div class="col-md-4">
+            <!-- Formulario para agregar una nueva opinión -->
+            <div class="card">
+                <div class="card-body">
+                    <h3>Deja tu Comentarios:</h3>
+                    <form method="post" action="{% url 'crear_opinion' producto.id %}">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-info mt-3">Enviar Comentarios</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enlace de regreso a la página de inicio u otra página relevante -->
+    <a href="{% url 'inicio' %}" class="btn btn-outline-info mt-4">Volver a la página de inicio</a>
+</div>
+{% endblock %}

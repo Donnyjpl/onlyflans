@@ -17,6 +17,7 @@
                 <div class="card-body">
                     <h5 class="card-title text-center">{{ producto.name|title }}</h5>
                     <p class="card-text">{{ producto.description|truncatechars:100 }}</p>
+                    <a href="{% url 'opiniones_producto' producto.id %}" class="btn btn-info btn-block">Ver Comentarios</a>
                     <!-- Puedes ajustar el número de caracteres según tu preferencia -->
                     <!-- Puedes agregar más detalles o acciones aquí si es necesario -->
                 </div>

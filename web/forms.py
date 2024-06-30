@@ -1,5 +1,5 @@
 from django import forms
-from .models import Flan, Contacto,Usuario
+from .models import Flan, Contacto,Usuario,OpinionCliente
 
 class FlanForm(forms.ModelForm):
     class Meta:
@@ -60,3 +60,11 @@ class UsuarioForm(forms.ModelForm):
 class LoginForm(forms.Form):
     username = forms.CharField(label='Nombre de usuario')
     password = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
+    
+class OpinionClienteForm(forms.ModelForm):
+    class Meta:
+        model = OpinionCliente
+        fields = ['nombre_cliente', 'opinion']
+        widgets = {
+            'opinion': forms.Textarea(attrs={'rows': 4}),  # Widget para un área de texto multilínea
+        }    

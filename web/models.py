@@ -52,3 +52,11 @@ class Usuario(AbstractUser):
     )
     def __str__(self):
         return self.username 
+     
+class OpinionCliente(models.Model):
+    producto = models.ForeignKey(Flan, on_delete=models.CASCADE, related_name='opiniones')
+    nombre_cliente = models.CharField(max_length=100)
+    opinion = models.TextField()
+
+    def __str__(self):
+        return f'Opinión de {self.nombre_cliente} sobre {self.producto.name}'  # Acceso al nombre del producto usando self.producto.name

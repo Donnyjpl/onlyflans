@@ -1,11 +1,10 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.http import HttpResponseRedirect,HttpResponseForbidden
-from .forms import FlanForm,UsuarioForm,LoginForm,ContactoForm
-from .models import Flan
-
+from .forms import FlanForm,UsuarioForm,LoginForm,ContactoForm,OpinionClienteForm
+from .models import Flan, OpinionCliente
 
 # Create your views here.
 
@@ -67,7 +66,7 @@ def contacto(request):
     return render(request, 'contacto.html', {'formm': formm})
 
 def success(request):
-    return render(request, 'success.html')
+    return render(request, 'flanes/success.html')
 
 def add_user(request):
     if request.method == 'POST':
@@ -77,10 +76,10 @@ def add_user(request):
             return redirect('registro_exitoso')
     else:
         form = UsuarioForm()
-    return render(request, 'agregar_usuario.html', {'form': form})
+    return render(request, 'usuario/agregar_usuario.html', {'form': form})
 
 def registro_exitoso(request):
-    return render(request, 'registro_exitoso.html')
+    return render(request, 'usuario/registro_exitoso.html')
 
 def custom_login(request):
     if request.method == 'POST':
@@ -98,5 +97,25 @@ def custom_login(request):
     else:
         form = LoginForm()
     return render(request, 'registration/login.html', {'form': form})
+
+def crear_opinion(request, producto_id):
+    producto = get_object_or_404(Flan, pk=producto_id)
+    
+    if request.method == 'POST':
+        form = OpinionClienteForm(request.POST)
+        if form.is_valid():
+            opinion = form.save(commit=False)
+            opinion.producto = producto
+            opinion.save()
+            return redirect('opiniones_producto', producto_id=producto.id)  # Redirige a la página de detalle del producto o donde prefieras
+    else:
+        form = OpinionClienteForm()
+    
+    return render(request, 'flanes/crear_opinion.html', {'form': form, 'producto': producto})
+
+def opiniones_producto(request, producto_id):
+    producto = get_object_or_404(Flan, pk=producto_id)
+    opiniones = producto.opiniones.all()
+    return render(request, 'flanes/opiniones.html', {'producto': producto, 'opiniones': opiniones})
 
 

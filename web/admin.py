@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Flan, Contacto,Usuario
+from .models import Flan, Contacto,Usuario,OpinionCliente
 
 # Asegúrate de importar correctamente tu modelo Flan
 
@@ -18,3 +18,9 @@ class ContactFormAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False  # Evita que se pueda agregar un formulario de contacto desde el admin
 admin.site.register(Usuario)
+
+@admin.register(OpinionCliente)
+class ContactFormAdmin(admin.ModelAdmin):
+    list_display = ('producto', 'nombre_cliente','opinion')
+    search_fields = ('producto', 'nombre_cliente','opinion')
+    readonly_fields = ('producto',)  # Hace que el campo UUID sea solo de lectura

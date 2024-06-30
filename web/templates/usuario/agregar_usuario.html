@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Agregar Usuario - OnlyFlans{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center " style="min-height: 45vh;">
+    <div class="card p-4" style="width: 450px;">
+        <h2 class="mb-4 text-center">Agregar Usuario</h2>
+        <form method="post" class="usuario-form">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div class="mb-3">
+                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <div class="invalid-feedback d-block">
+                    {% for error in field.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <button type="submit" class="btn btn-info btn-block">Guardar Usuario</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
