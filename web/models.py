@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify 
 import uuid
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 # Create your models here.
 
@@ -19,14 +20,22 @@ class Flan(models.Model):
 
     def __str__(self):
         return self.name
-    
-    
+    @property
+    def promedio_valoracion(self):
+        if self.opiniones.exists():
+            total_valoraciones = sum(opinion.valoracion for opinion in self.opiniones.all())
+            return total_valoraciones / self.opiniones.count()
+        else:
+            return 0  # Retorna 0 si no hay opiniones
+        
 class Contacto(models.Model):
     contact_form_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     customer_name = models.CharField(max_length=64)
     customer_email = models.EmailField()
     message = models.TextField()
-        
+    contacted = models.BooleanField(default=False)  # Campo para indicar si el mensaje ha sido contactado
+    date_contacted = models.DateTimeField(null=True, blank=True)  # Fecha y hora en que se contactó al cliente 
+  
     def __str__(self):
         return f"Formulario de Contacto - {self.contact_form_uuid}"
     
@@ -57,6 +66,8 @@ class OpinionCliente(models.Model):
     producto = models.ForeignKey(Flan, on_delete=models.CASCADE, related_name='opiniones')
     nombre_cliente = models.CharField(max_length=100)
     opinion = models.TextField()
+    valoracion = models.IntegerField(choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')])
+    created_at = models.DateTimeField(auto_now_add=True)  # Campo para la fecha de creación
 
     def __str__(self):
         return f'Opinión de {self.nombre_cliente} sobre {self.producto.name}'  # Acceso al nombre del producto usando self.producto.name

@@ -60,11 +60,17 @@ class UsuarioForm(forms.ModelForm):
 class LoginForm(forms.Form):
     username = forms.CharField(label='Nombre de usuario')
     password = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
-    
 class OpinionClienteForm(forms.ModelForm):
+    # Campo para valoración del 1 al 5
+    valoracion = forms.ChoiceField(label='Valoración', choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')],
+                                   widget=forms.Select(attrs={'class': 'form-control'}))
+    
+    # Campo oculto para guardar automáticamente el nombre de usuario
+    nombre_cliente = forms.CharField(widget=forms.HiddenInput(), required=False)
+
     class Meta:
         model = OpinionCliente
-        fields = ['nombre_cliente', 'opinion']
+        fields = ['nombre_cliente', 'opinion', 'valoracion']
         widgets = {
-            'opinion': forms.Textarea(attrs={'rows': 4}),  # Widget para un área de texto multilínea
-        }    
+            'opinion': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),  # Widget para un área de texto multilínea
+        }

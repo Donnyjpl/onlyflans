@@ -1,10 +1,14 @@
+from django.views.generic import ListView
+from django.urls import reverse_lazy
+from django.utils import timezone
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.http import HttpResponseRedirect,HttpResponseForbidden
 from .forms import FlanForm,UsuarioForm,LoginForm,ContactoForm,OpinionClienteForm
-from .models import Flan, OpinionCliente
+from .models import Flan,Contacto
+
 
 # Create your views here.
 
@@ -52,7 +56,7 @@ def create_flan(request):
     else:
         form = FlanForm()
     
-    return render(request, 'create_flan.html', {'form': form})
+    return render(request, 'flanes/create_flan.html', {'form': form})
 
 def contacto(request):
     if request.method == 'POST':
@@ -67,6 +71,28 @@ def contacto(request):
 
 def success(request):
     return render(request, 'flanes/success.html')
+
+def lista_mensajes(request):
+    mensajes=Contacto.objects.filter(contacted=False)
+    return render(request, 'flanes/lista_mensajes.html', {'mensajes': mensajes})
+
+def marcar_contactado(request, uuid):
+    mensaje = get_object_or_404(Contacto, contact_form_uuid=uuid)
+    
+    if request.method == 'POST':
+        # Marcar el mensaje como contactado
+        mensaje.contacted = True
+        mensaje.date_contacted = timezone.now()  # Asignar la fecha actual
+        mensaje.save()
+        
+        # Redirigir a la página de confirmación
+        return redirect('confirmacion_contacto', uuid=uuid)
+    
+    return redirect('lista_mensajes')  # En caso de acceso directo a la URL sin POST
+
+def confirmacion_contacto(request, uuid):
+    mensaje = get_object_or_404(Contacto, contact_form_uuid=uuid)
+    return render(request, 'flanes/confirmacion_contacto.html', {'mensaje': mensaje})
 
 def add_user(request):
     if request.method == 'POST':
@@ -97,25 +123,28 @@ def custom_login(request):
     else:
         form = LoginForm()
     return render(request, 'registration/login.html', {'form': form})
-
-def crear_opinion(request, producto_id):
-    producto = get_object_or_404(Flan, pk=producto_id)
+@login_required
+def crear_opinion(request, slug):
+    producto = get_object_or_404(Flan, slug=slug)
     
     if request.method == 'POST':
         form = OpinionClienteForm(request.POST)
         if form.is_valid():
             opinion = form.save(commit=False)
             opinion.producto = producto
+            opinion.nombre_cliente = request.user.username  # Asigna el nombre de usuario actual
             opinion.save()
-            return redirect('opiniones_producto', producto_id=producto.id)  # Redirige a la página de detalle del producto o donde prefieras
+            # Redirige a la página de opiniones del producto usando el slug
+            return redirect('opiniones_producto', slug=producto.slug)
     else:
-        form = OpinionClienteForm()
+        initial_data = {'nombre_cliente': request.user.username}  # Establece el nombre de usuario actual
+        form = OpinionClienteForm(initial=initial_data)
     
     return render(request, 'flanes/crear_opinion.html', {'form': form, 'producto': producto})
 
-def opiniones_producto(request, producto_id):
-    producto = get_object_or_404(Flan, pk=producto_id)
-    opiniones = producto.opiniones.all()
+def opiniones_producto(request, slug):
+    producto = get_object_or_404(Flan, slug=slug)
+    opiniones = producto.opiniones.all().order_by('-created_at')[:5]
     return render(request, 'flanes/opiniones.html', {'producto': producto, 'opiniones': opiniones})
 
 

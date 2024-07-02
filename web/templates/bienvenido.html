@@ -17,7 +17,40 @@
                 <div class="card-body">
                     <h5 class="card-title text-center">{{ producto.name|title }}</h5>
                     <p class="card-text">{{ producto.description|truncatechars:100 }}</p>
-                    <a href="{% url 'opiniones_producto' producto.id %}" class="btn btn-info btn-block">Ver Comentarios</a>
+                    {% if producto.opiniones.exists %}
+                    <p class="card-text fw-bold">
+                      Valoración:
+                      {% if producto.promedio_valoracion >= 1 %}
+                      <i class="fas fa-star valoracion"></i>
+                      {% else %}
+                      <i class="far fa-star"></i>
+                      {% endif %}
+                      {% if producto.promedio_valoracion >= 2 %}
+                      <i class="fas fa-star valoracion"></i>
+                      {% else %}
+                      <i class="far fa-star"></i>
+                      {% endif %}
+                      {% if producto.promedio_valoracion >= 3 %}
+                      <i class="fas fa-star valoracion"></i>
+                      {% else %}
+                      <i class="far fa-star"></i>
+                      {% endif %}
+                      {% if producto.promedio_valoracion >= 4 %}
+                      <i class="fas fa-star valoracion"></i>
+                      {% else %}
+                      <i class="far fa-star"></i>
+                      {% endif %}
+                      {% if producto.promedio_valoracion >= 5 %}
+                      <i class="fas fa-star valoracion"></i>
+                      {% else %}
+                      <i class="far fa-star"></i>
+                      {% endif %}
+                    </p>
+                    {% else %}
+                    <p class="card-text">Sin valoraciones aún.</p>
+                    {% endif %}
+                    <a href="{% url 'opiniones_producto' producto.slug %}" class="btn btn-info btn-block">Ver
+                        Comentarios</a>
                     <!-- Puedes ajustar el número de caracteres según tu preferencia -->
                     <!-- Puedes agregar más detalles o acciones aquí si es necesario -->
                 </div>

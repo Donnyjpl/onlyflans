@@ -1,0 +1,21 @@
+
+<!-- confirmacion_contacto.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirmación de Contacto</title>
+</head>
+<body>
+    <h1>Confirmación de Contacto</h1>
+
+    <p>El mensaje de contacto con el siguiente detalle ha sido marcado como contactado:</p>
+
+    <strong>Nombre:</strong> {{ mensaje.customer_name }}<br>
+    <strong>Email:</strong> {{ mensaje.customer_email }}<br>
+    <strong>Mensaje:</strong> {{ mensaje.message }}<br>
+    <strong>Fecha de contacto:</strong> {{ mensaje.date_contacted }}
+
+    <p><a href="{% url 'lista_mensajes' %}">Volver a la lista de mensajes</a></p>
+</body>
+</html>

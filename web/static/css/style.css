@@ -8,3 +8,8 @@ body {
     margin: 0;
     padding: 0;
 }
+
+.valoracion {
+    color: #ffc107;
+    /* Color amarillo para las estrellas llenas */
+}
