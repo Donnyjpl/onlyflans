@@ -10,6 +10,7 @@ from .forms import FlanForm,UsuarioForm,LoginForm,ContactoForm,OpinionClienteFor
 from .models import Flan,Contacto
 
 
+
 # Create your views here.
 
 def inicio(request):
@@ -45,8 +46,10 @@ def bienvenido(request):
     context = {
         'productos': flanes_privados
     }
+ 
     return render(request, 'bienvenido.html', context)
 
+@login_required
 def create_flan(request):
     if request.method == 'POST':
         form = FlanForm(request.POST)
@@ -72,6 +75,7 @@ def contacto(request):
 def success(request):
     return render(request, 'flanes/success.html')
 
+@login_required
 def lista_mensajes(request):
     mensajes=Contacto.objects.filter(contacted=False)
     return render(request, 'flanes/lista_mensajes.html', {'mensajes': mensajes})
@@ -147,4 +151,5 @@ def opiniones_producto(request, slug):
     opiniones = producto.opiniones.all().order_by('-created_at')[:5]
     return render(request, 'flanes/opiniones.html', {'producto': producto, 'opiniones': opiniones})
 
-
+def admin_usuario(request):
+    return render(request, 'admin.html')

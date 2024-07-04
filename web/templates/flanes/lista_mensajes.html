@@ -1,45 +1,35 @@
-<!-- lista_mensajes.html -->
+{% extends 'baseadmin.html' %}
+{% block title %}Lista de Mensajes de Contacto - OnlyFlans{% endblock %}
+{% block content %}
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Mensajes de Contacto</title>
-    <!-- Enlace a Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container">
-        <h1 class="my-4">Lista de Mensajes de Contacto</h1>
-
-        {% if mensajes %}
-            <ul class="list-group mb-4">
-            {% for mensaje in mensajes %}
-                <li class="list-group-item">
-                    <strong>Nombre:</strong> {{ mensaje.customer_name }}<br>
-                    <strong>Email:</strong> {{ mensaje.customer_email }}<br>
-                    <strong>Mensaje:</strong> {{ mensaje.message }}<br>
-                    {% if mensaje.contacted %}
-                        <em>Contactado el: {{ mensaje.date_contacted }}</em>
-                    {% else %}
-                        <div class="row">
-                            <button type="submit" class="btn btn-secondary">Enviar un Correo</button>
-                            <form action="{% url 'marcar_contactado' mensaje.contact_form_uuid %}" method="post">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-primary">Marcar como contactado</button>
-                            </form>
-                        </div>
-                    {% endif %}
-                </li>
-            {% endfor %}
-            </ul>
-        {% else %}
-            <p>No hay mensajes por responder en este momento.</p>
-        {% endif %}
-    </div>
-
-    <!-- Enlace a Bootstrap JS y dependencias opcionales (si las necesitas) -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<div class="container">
+    <h1 class="my-4">Lista de Mensajes de Contacto</h1>
+    {% if mensajes %}
+    <ul class="list-group mb-4">
+        {% for mensaje in mensajes %}
+        <li class="list-group-item">
+            <strong>Nombre:</strong> {{ mensaje.customer_name }}<br>
+            <strong>Email:</strong> {{ mensaje.customer_email }}<br>
+            <strong>Mensaje:</strong> {{ mensaje.message }}<br>
+            {% if mensaje.contacted %}
+            <em>Contactado el: {{ mensaje.date_contacted }}</em>
+            {% else %}
+            <div class="row text-center m-2">
+                <div class="col-md-6">
+                    <button type="submit" class="btn btn-info">Enviar un Correo</button>
+                </div>
+                <div class="col-md-6">
+                    <form action="{% url 'marcar_contactado' mensaje.contact_form_uuid %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-info">Marcar como contactado</button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No hay mensajes por responder en este momento.</p>
+    {% endif %}
+    {% endblock %}

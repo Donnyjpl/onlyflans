@@ -50,6 +50,10 @@ class UsuarioForm(forms.ModelForm):
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Las contraseñas no coinciden")
         return password2
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].help_text = None  # Elimina el mensaje de ayuda del campo username
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -60,6 +64,7 @@ class UsuarioForm(forms.ModelForm):
 class LoginForm(forms.Form):
     username = forms.CharField(label='Nombre de usuario')
     password = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
+    
 class OpinionClienteForm(forms.ModelForm):
     # Campo para valoración del 1 al 5
     valoracion = forms.ChoiceField(label='Valoración', choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')],

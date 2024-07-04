@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from .views import bienvenido, acerca, inicio, create_flan, contacto, success, add_user, registro_exitoso, opiniones_producto, crear_opinion
-from .views import lista_mensajes, marcar_contactado, confirmacion_contacto  # Asegúrate de importar las vistas necesarias
+from .views import lista_mensajes, marcar_contactado, confirmacion_contacto,admin_usuario
 
 urlpatterns = [
     path('', inicio, name='inicio'),
@@ -9,6 +9,7 @@ urlpatterns = [
     path('acerca/', acerca, name='acerca'),
     path('crear/', create_flan, name='crear'),
     path('contacto/', contacto, name='contacto'),
+    path('admin2/', admin_usuario, name='admin2'),
     path('mensajes/', lista_mensajes, name='lista_mensajes'),
     path('marcar-contactado/<uuid:uuid>/', marcar_contactado, name='marcar_contactado'),
     path('confirmacion-contacto/<uuid:uuid>/', confirmacion_contacto, name='confirmacion_contacto'),  # Aquí faltaba una coma

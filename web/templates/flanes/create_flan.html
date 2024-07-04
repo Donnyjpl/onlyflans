@@ -1,10 +1,18 @@
-{% extends 'base.html' %}
-{% block title %}Bienvenido - OnlyFlans{% endblock %}
+{% extends 'baseadmin.html' %}
+{% block title %}Crear Flan - OnlyFlans{% endblock %}
 {% block content %}
-<h1>Crear Flan</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button class="btn btn-info mt-3" type="submit">Guardar</button>
-    </form>
-    {% endblock %}    
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow p-4">
+                <h1 class="card-title text-center mb-4">Crear Flan</h1>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="btn btn-info mt-3 d-block mx-auto" type="submit">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

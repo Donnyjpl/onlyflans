@@ -1,37 +1,21 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Formulario de Contacto - OnlyFlans{% endblock %}
+{% block title %}
+Formulario de Contacto - OnlyFlans
+{% endblock %}
 
 {% block content %}
 <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <h2 class="card-title text-center mb-4">Formulario de Contacto</h2>
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="row text-auto">
-                            <!-- Aplicando clases de Bootstrap a los campos del formulario -->
-                            <div class="form-group mb-3">
-                                {{ formm.customer_name.label_tag }}
-                                {{ formm.customer_name }}
-                            </div>
-                            <div class="form-group mb-3">
-                                {{ formm.customer_email.label_tag }}
-                                {{ formm.customer_email }}
-                            </div>
-                            <div class="form-group mb-3">
-                                {{ formm.message.label_tag }}
-                                {{ formm.message }}
-                            </div>
-                            <div class="form-group mb-3">
-                                <button type="submit" class="btn btn-info btn-sm">Enviar</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+        <div class="col-md-6">
+            <div class="card shadow p-4">
+                <h1 class="card-title text-center mb-4">Formulario Contacto</h1>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ formm.as_p }}
+                    <button class="btn btn-info mt-3 d-block mx-auto" type="submit">Guardar</button>
+                </form>
             </div>
         </div>
     </div>

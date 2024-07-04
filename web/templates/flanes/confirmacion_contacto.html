@@ -1,21 +1,30 @@
+{% extends 'baseadmin.html' %}
 
-<!-- confirmacion_contacto.html -->
+{% block title %}Confirmación de Contacto - OnlyFlans{% endblock %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Confirmación de Contacto</title>
-</head>
-<body>
-    <h1>Confirmación de Contacto</h1>
+{% block content %}
 
-    <p>El mensaje de contacto con el siguiente detalle ha sido marcado como contactado:</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h1 class="card-title text-center">Confirmación de Contacto</h1>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">El mensaje de contacto con el siguiente detalle ha sido marcado como contactado:</p>
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong>Nombre:</strong> {{ mensaje.customer_name }}</li>
+                        <li class="list-group-item"><strong>Email:</strong> {{ mensaje.customer_email }}</li>
+                        <li class="list-group-item"><strong>Mensaje:</strong> {{ mensaje.message }}</li>
+                        <li class="list-group-item"><strong>Fecha de contacto:</strong> {{ mensaje.date_contacted }}</li>
+                    </ul>
+                    <br>
+                    <a href="{% url 'lista_mensajes' %}" class="btn btn-info">Volver a la lista de mensajes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <strong>Nombre:</strong> {{ mensaje.customer_name }}<br>
-    <strong>Email:</strong> {{ mensaje.customer_email }}<br>
-    <strong>Mensaje:</strong> {{ mensaje.message }}<br>
-    <strong>Fecha de contacto:</strong> {{ mensaje.date_contacted }}
-
-    <p><a href="{% url 'lista_mensajes' %}">Volver a la lista de mensajes</a></p>
-</body>
-</html>
+{% endblock %}
