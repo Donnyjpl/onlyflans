@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-import os
 from django.shortcuts import redirect
 
 import os
@@ -160,9 +159,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'web.Usuario'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+EMAIL_HOST = 'EMAIL_HOST'
+EMAIL_PORT = 'EMAIL_PORT'
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'dknnnmnnm@gmail.com'  # Coloca aquí tu dirección de correo
-EMAIL_HOST_PASSWORD = 'jh7j hdpu 3pns hp6s kyno 6yjj sahi polq'    # Coloca aquí tu contraseña
+EMAIL_HOST_USER = 'EMAIL_HOST_USE'  # Coloca aquí tu dirección de correo
+EMAIL_HOST_PASSWORD = 'EMAIL_HOST_PASSWORD'    # Coloca aquí tu contraseña
 DEFAULT_FROM_EMAIL = 'webmaster@localhost'  # Dirección predeterminada de remitente
