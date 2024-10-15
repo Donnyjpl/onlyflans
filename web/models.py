@@ -13,6 +13,7 @@ class Flan(models.Model):
     image_url = models.URLField()
     slug = models.SlugField(unique=True)
     is_private = models.BooleanField(default=False)
+    precio = models.DecimalField(max_digits=10, decimal_places=2)  # Ajuste adecuado para precio
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)

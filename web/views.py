@@ -5,9 +5,13 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-from django.http import HttpResponseRedirect,HttpResponseForbidden
+from django.http import HttpResponseRedirect
 from .forms import FlanForm,UsuarioForm,LoginForm,ContactoForm,OpinionClienteForm
 from .models import Flan,Contacto
+from django.core.mail import send_mail
+from django.views import View
+from email.mime.text import MIMEText
+from email.header import Header
 
 
 
@@ -153,3 +157,26 @@ def opiniones_producto(request, slug):
 
 def admin_usuario(request):
     return render(request, 'admin.html')
+
+class EnviarCorreoView(View):
+    def get(self, request):
+        # Lógica para enviar el correo electrónico
+        subject = 'Correo de recuperación de contraseña'
+        message = 'Hola, aquí está tu contraseña: contraseña'
+        
+        msg = MIMEText(message, 'plain', 'utf-8')
+        msg['Subject'] = Header(subject, 'utf-8')
+        
+        try:
+            send_mail(
+                subject,
+                message,
+                'tu_correo@gmail.com',  # Remitente
+                ['destinatario@example.com'],  # Lista de destinatarios
+                fail_silently=False,
+            )
+            mensaje = "Correo enviado correctamente."
+        except Exception as e:
+            mensaje = f"Error al enviar el correo: {str(e)}"
+        
+        return render(request, 'template.html', {'mensaje': mensaje})

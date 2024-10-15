@@ -19,38 +19,41 @@
                     <p class="card-text">{{ producto.description|truncatechars:100 }}</p>
                     {% if producto.opiniones.exists %}
                     <p class="card-text fw-bold">
-                      Valoración:
-                      {% if producto.promedio_valoracion >= 1 %}
-                      <i class="fas fa-star valoracion"></i>
-                      {% else %}
-                      <i class="far fa-star"></i>
-                      {% endif %}
-                      {% if producto.promedio_valoracion >= 2 %}
-                      <i class="fas fa-star valoracion"></i>
-                      {% else %}
-                      <i class="far fa-star"></i>
-                      {% endif %}
-                      {% if producto.promedio_valoracion >= 3 %}
-                      <i class="fas fa-star valoracion"></i>
-                      {% else %}
-                      <i class="far fa-star"></i>
-                      {% endif %}
-                      {% if producto.promedio_valoracion >= 4 %}
-                      <i class="fas fa-star valoracion"></i>
-                      {% else %}
-                      <i class="far fa-star"></i>
-                      {% endif %}
-                      {% if producto.promedio_valoracion >= 5 %}
-                      <i class="fas fa-star valoracion"></i>
-                      {% else %}
-                      <i class="far fa-star"></i>
-                      {% endif %}
+                        Valoración:
+                        {% if producto.promedio_valoracion >= 1 %}
+                        <i class="fas fa-star valoracion"></i>
+                        {% else %}
+                        <i class="far fa-star"></i>
+                        {% endif %}
+                        {% if producto.promedio_valoracion >= 2 %}
+                        <i class="fas fa-star valoracion"></i>
+                        {% else %}
+                        <i class="far fa-star"></i>
+                        {% endif %}
+                        {% if producto.promedio_valoracion >= 3 %}
+                        <i class="fas fa-star valoracion"></i>
+                        {% else %}
+                        <i class="far fa-star"></i>
+                        {% endif %}
+                        {% if producto.promedio_valoracion >= 4 %}
+                        <i class="fas fa-star valoracion"></i>
+                        {% else %}
+                        <i class="far fa-star"></i>
+                        {% endif %}
+                        {% if producto.promedio_valoracion >= 5 %}
+                        <i class="fas fa-star valoracion"></i>
+                        {% else %}
+                        <i class="far fa-star"></i>
+                        {% endif %}
                     </p>
                     {% else %}
                     <p class="card-text">Sin valoraciones aún.</p>
                     {% endif %}
                     <a href="{% url 'opiniones_producto' producto.slug %}" class="btn btn-info btn-block">Ver
                         Comentarios</a>
+                    <button class="btn btn-success btn-block mt-2"
+                        onclick="agregarAlCarrito('{{ producto.slug }}')">Agregar al Carrito</button>
+
                     <!-- Puedes ajustar el número de caracteres según tu preferencia -->
                     <!-- Puedes agregar más detalles o acciones aquí si es necesario -->
                 </div>
@@ -59,4 +62,27 @@
         {% endfor %}
     </div>
 </div>
+<script>
+function agregarAlCarrito(productoSlug) {
+    fetch('/compra/agregar/' + productoSlug + '/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Producto agregado al carrito.');
+        } else {
+            alert('Error al agregar el producto al carrito.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+</script>
+
 {% endblock %}

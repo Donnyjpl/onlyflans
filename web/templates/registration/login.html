@@ -22,6 +22,12 @@
                         </div>
                         <button type="submit" class="btn btn-info d-block mx-auto">Iniciar Sesión</button>
                     </form>
+                    
+                    <!-- Enlace para recuperar contraseña -->
+                    <div class="mt-3 text-center">
+                        <a href="{% url 'reset_password' %}">¿Olvidaste tu contraseña?</a>
+                    </div>
+                    
                     {% if messages %}
                         <div class="mt-3">
                             <ul class="list-unstyled">

@@ -4,12 +4,13 @@ from .models import Flan, Contacto,Usuario,OpinionCliente
 class FlanForm(forms.ModelForm):
     class Meta:
         model = Flan
-        fields = ['name', 'description', 'image_url', 'is_private']
+        fields = ['name', 'description', 'precio','image_url', 'is_private']
         # Puedes personalizar las etiquetas de los campos aquí si lo deseas
         labels = {
             'name': 'Nombre',
             'description': 'Descripción',
             'image_url': 'URL de la Imagen',
+            'precio': 'Precio del Producto',
             'is_private': '¿Es privado?',
         }
 class ContactoForm(forms.ModelForm):
