@@ -6,7 +6,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a class="nav-link nav-custom" href="{% url 'inicio' %}">Inicio</a>
                 </li>
@@ -19,18 +19,25 @@
                 <li class="nav-item">
                     <a class="nav-link nav-custom" href="{% url 'contacto' %}">Contacto</a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'ver_carrito' %}">Carrito</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'ver_carrito' %}">Carrito</a>
                 </li>
                 {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link nav-custom" href="{% url 'logout' %}">Cerrar Sesión</a>
-                </li>
+                <form method="post" action="{% url 'logout' %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-info">Cerrar Sesión</button>
+                </form>
                 {% else %}
                 <li class="nav-item">
                     <a class="nav-link nav-custom" href="{% url 'login' %}">Iniciar Sesión</a>
                 </li>
                 {% endif %}
-            </ul>
+            </ul> {% if user.is_authenticated %}
+            <!-- Ícono del carrito -->
+            <a href="{% url 'ver_carrito' %}" class="navbar-cart">
+                <i class="fa-solid fa-cart-shopping" style="font-size: 30px; color: #000;"></i>
+                {% endif %}
+            </a>
         </div>
     </div>
 </nav>

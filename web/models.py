@@ -3,6 +3,12 @@ from django.utils.text import slugify
 import uuid
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
+from django.db import models
+import uuid
+from django.utils.text import slugify
+from PIL import Image
+import os
+from django.conf import settings
 
 # Create your models here.
 
@@ -10,17 +16,18 @@ class Flan(models.Model):
     flan_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=64)
     description = models.TextField()
-    image_url = models.URLField()
+    image_url = models.URLField()  # URL de la imagen original (la que descargas)
     slug = models.SlugField(unique=True)
     is_private = models.BooleanField(default=False)
-    precio = models.DecimalField(max_digits=10, decimal_places=2)  # Ajuste adecuado para precio
-
+    precio = models.DecimalField(max_digits=10, decimal_places=2)
+    
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Flan, self).save(*args, **kwargs)
-
+    
     def __str__(self):
         return self.name
+
     @property
     def promedio_valoracion(self):
         if self.opiniones.exists():
@@ -43,6 +50,7 @@ class Contacto(models.Model):
 class Usuario(AbstractUser):
     # Agrega los campos personalizados si los tienes
     telefono = models.CharField(max_length=20)
+    pais= models.CharField(max_length=2, default='CL')
     
     # Define related_name único para los campos ManyToManyField
     groups = models.ManyToManyField(

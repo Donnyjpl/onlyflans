@@ -1,0 +1,12 @@
+<!-- templates/flan/redimensionada.html -->
+{% extends 'base.html' %}
+
+{% block title %}Imagen Redimensionada{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h2>Imagen Redimensionada Exitosamente</h2>
+    <p>La imagen del flan <strong>{{ flan.name }}</strong> ha sido redimensionada correctamente.</p>
+    <img src="{{ image_url }}" alt="Imagen redimensionada del flan">
+  </div>
+{% endblock %}

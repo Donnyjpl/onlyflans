@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="main-heading">Comentarios de: {{ producto.name }}</h1> 
+    <h1 class="main-heading">Comentarios de: {{ producto.name|title }}</h1> 
     <img src="{{ producto.image_url }}" width="400" alt="Imagen de {{ producto.name }}">
     <hr>
 

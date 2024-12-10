@@ -1,6 +1,34 @@
 from django import forms
 from .models import Flan, Contacto,Usuario,OpinionCliente
+from django.contrib.auth.forms import SetPasswordForm
 
+
+class CustomPasswordResetConfirmForm(SetPasswordForm):
+    new_password1 = forms.CharField(
+        label="Nueva Contraseña",
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Ingresa tu nueva contraseña'}),
+    )
+    new_password2 = forms.CharField(
+        label="Confirmar Nueva Contraseña",
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirma tu nueva contraseña'}),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password1 = cleaned_data.get("new_password1")
+        new_password2 = cleaned_data.get("new_password2")
+
+        if new_password1 and new_password2 and new_password1 != new_password2:
+            raise forms.ValidationError("Las contraseñas no coinciden.")
+    
+    
+class CustomEmailForm(forms.Form):
+    email = forms.EmailField(
+        label="Correo Electrónico",
+        max_length=254,
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Ingresa tu correo electrónico'}),
+    )
+    
 class FlanForm(forms.ModelForm):
     class Meta:
         model = Flan
@@ -16,16 +44,28 @@ class FlanForm(forms.ModelForm):
 class ContactoForm(forms.ModelForm):
     class Meta:
         model = Contacto
-        fields = ['customer_name','customer_email', 'message']
+        fields = ['customer_name', 'customer_email', 'message']
         labels = {
             'customer_name': 'Nombre:',
             'customer_email': 'Correo Electrónico:',
             'message': 'Mensaje:',
         }
         widgets = {
-            'message': forms.Textarea(attrs={'cols': 30, 'rows': 3}),  # Ajusta el tamaño del TextArea
+            'customer_name': forms.TextInput(attrs={
+                'class': 'form-control',  # Clase de Bootstrap
+                'placeholder': 'Ingresa tu nombre',  # Placeholder
+            }),
+            'customer_email': forms.EmailInput(attrs={
+                'class': 'form-control',  # Clase de Bootstrap
+                'placeholder': 'Ingresa tu correo electrónico',  # Placeholder
+            }),
+            'message': forms.Textarea(attrs={
+                'class': 'form-control',  # Clase de Bootstrap
+                'cols': 30,
+                'rows': 3,
+                'placeholder': 'Escribe tu mensaje aquí...',  # Placeholder
+            }),
         }
-        
       
 class UsuarioForm(forms.ModelForm):
     password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
@@ -63,9 +103,20 @@ class UsuarioForm(forms.ModelForm):
             user.save()
             
 class LoginForm(forms.Form):
-    username = forms.CharField(label='Nombre de usuario')
-    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
-    
+    username = forms.CharField(
+        label='Nombre de usuario',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',  # Clase de Bootstrap
+            'placeholder': 'Ingresa tu nombre de usuario',  # Placeholder
+        })
+    )
+    password = forms.CharField(
+        label='Contraseña',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',  # Clase de Bootstrap
+            'placeholder': 'Ingresa tu contraseña',  # Placeholder
+        })
+    )
 class OpinionClienteForm(forms.ModelForm):
     # Campo para valoración del 1 al 5
     valoracion = forms.ChoiceField(label='Valoración', choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')],

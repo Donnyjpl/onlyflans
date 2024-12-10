@@ -19,6 +19,40 @@ from dotenv import load_dotenv
 # Cargar las variables del archivo .env
 load_dotenv()
 
+
+# Configuración de logging
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'verbose': {
+#             'format': '{levelname} {asctime} {module} {message}',
+#             'style': '{',
+#         },
+#         'simple': {
+#             'format': '{levelname} {message}',
+#             'style': '{',
+#         },
+#     },
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'simple',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#         },
+#         'web': {  # Cambia 'your_app_name' por el nombre de tu aplicación
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#         },
+#     },
+# }
+
+
 # Uso de las variables de entorno
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG') == 'True'
@@ -48,7 +82,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG') == 'True'
 
 ALLOWED_HOSTS = []
 
@@ -56,13 +90,16 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "web","compra",
+    "web",
+    "compra",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',  
+    'django.contrib.staticfiles', 
+
+
 ]
 
 def custom_redirect(request):
@@ -83,11 +120,15 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware'
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
-ROOT_URLCONF = 'onlyflans.urls'
 
+ROOT_URLCONF = 'onlyflans.urls'
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -157,11 +198,39 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'web.Usuario'
+PASSWORD_RESET_TIMEOUT_DAYS = 1  # Válido por 1 día
+
+
+""" EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+DEFAULT_FROM_EMAIL = 'EMAIL_HOST_USER'  # Dirección predeterminada de remitente
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD') """
+
+
+# Configuración para enviar correos electrónicos usando Gmail
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'EMAIL_HOST'
-EMAIL_PORT = 'EMAIL_PORT'
+
+
+# Para desarrollo, imprime en la consola
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
+
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'EMAIL_HOST_USE'  # Coloca aquí tu dirección de correo
-EMAIL_HOST_PASSWORD = 'EMAIL_HOST_PASSWORD'    # Coloca aquí tu contraseña
-DEFAULT_FROM_EMAIL = 'webmaster@localhost'  # Dirección predeterminada de remitente
+EMAIL_HOST_USER = 'plazadonni@gmail.com'
+EMAIL_HOST_PASSWORD = 'u r i h a b y r z p f c s p j u'
+
+import os
+
+# Define the base directory for your project
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Define the directory to store media files (images, files, etc.)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Ruta donde se guardarán las imágenes
+# Configura el servidor de desarrollo para servir archivos de medios

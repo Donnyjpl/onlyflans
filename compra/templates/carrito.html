@@ -1,23 +1,169 @@
 {% extends 'base.html' %}
-
+{% block title %}Carrito de Compras - OnlyFlans{% endblock %}
 {% block content %}
+
 <div class="container">
-  <h2 class="text-center m-4">Carrito de Compras</h2>
-  <ul class="list-group mb-4">
-    {% if carrito %}
-      {% for item in carrito.carritoflan_set.all %}
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <span>{{ item.cantidad }} x {{ item.flan.name }}</span>
-        <span>${{ item.subtotal }}</span>
-      </li>
-      {% endfor %}
-    {% else %}
-      <p>Tu carrito está vacío.</p>
-    {% endif %}
-  </ul>
-  {% if carrito %}
-    <p class="text-end fw-bold">Total: ${{ carrito.total }}</p>
-    <a href="{% url 'procesar_pago' %}" class="btn btn-success">Proceder al Pago</a>
-  {% endif %}
+    <h2 class="text-center m-4">Carrito de Compras</h2>
+    <div class="card mb-4">
+        <div class="card-body">
+            {% if carrito %}
+                <p>Fecha de creación: {{ carrito.creado }}</p>
+                <p id="mensaje-expiracion" class="alert alert-info"></p>
+
+                {% if productos_no_pagados %}
+                    <ul class="list-group mb-3">
+                        {% for item in productos_no_pagados %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>{{ item.cantidad }} x {{ item.flan.name|title }}</span>
+                            <span>${{ item.subtotal }}</span>
+                            <div>
+                                <form method="POST" action="{% url 'eliminar_flan' item.flan.slug %}" class="remove-flan d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                </form>
+                                <form method="POST" action="{% url 'actualizar_cantidad' item.flan.slug %}" class="update-quantity d-inline">
+                                    {% csrf_token %}
+                                    <input type="number" name="cantidad" value="{{ item.cantidad }}" min="1" required style="width: 60px;">
+                                    <button type="submit" class="btn btn-primary btn-sm">Actualizar</button>
+                                </form>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <h5 class="text-end fw-bold">Total en CLP: ${{ carrito.total }}</h5>
+                    <div class="text-end">
+                        <form method="POST" action="{% url 'eliminar_carrito' carrito.id %}" class="remove-carrito d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-lg">Eliminar Carrito</button>
+                        </form>
+                        <a href="{% url 'procesar_pago' %}" class="btn btn-info btn-lg mt-3">Proceder al Pago</a>
+                    </div>
+                {% else %}
+                    <p class="text-center">No tienes productos en tu carrito.</p>
+                    <div class="text-center">
+                        <a href="{% url 'inicio' %}" class="btn btn-success">Ver Flanes</a>
+                    </div>
+                {% endif %}
+
+                {% if productos_pagados %}
+                    <h4 class="mt-4">Productos Pagados</h4>
+                    <ul class="list-group mb-3">
+                        {% for item in productos_pagados %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>{{ item.cantidad }} x {{ item.flan.name|title }} (Pagado)</span>
+                            <span>${{ item.subtotal }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% else %}
+                <p class="text-center">Tu carrito está vacío.</p>
+                <div class="text-center">
+                    <a href="{% url 'inicio' %}" class="btn btn-success">Ver Flanes</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        function mostrarNotificacion(mensaje, tipo) {
+            const alertHTML = `<div class="alert alert-${tipo}">${mensaje}</div>`;
+            $('#mensaje-expiracion').append(alertHTML);
+            setTimeout(() => {
+                $('#mensaje-expiracion .alert').fadeOut(300, function () {
+                    $(this).remove();
+                });
+            }, 5000);
+        }
+
+        $('form.remove-flan').on('submit', function (event) {
+            event.preventDefault();
+            const form = $(this);
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    mostrarNotificacion('Flan eliminado del carrito.', 'success');
+                    location.reload();
+                },
+                error: function (jqXHR) {
+                    mostrarNotificacion('Error al eliminar el flan. Código: ' + jqXHR.status, 'danger');
+                }
+            });
+        });
+
+        $('form.update-quantity').on('submit', function (event) {
+            event.preventDefault();
+            const form = $(this);
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        mostrarNotificacion('Cantidad actualizada con éxito.', 'success');
+                        location.reload();
+                    } else {
+                        mostrarNotificacion('Error al actualizar la cantidad: ' + response.error, 'danger');
+                    }
+                },
+                error: function () {
+                    mostrarNotificacion('Error al actualizar la cantidad.', 'danger');
+                }
+            });
+        });
+
+        $('form.remove-carrito').on('submit', function (event) {
+            event.preventDefault();
+            const form = $(this);
+            const submitButton = form.find('button[type="submit"]');
+            submitButton.prop('disabled', true);
+
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        mostrarNotificacion(response.message, 'success');
+                        location.reload();
+                    } else {
+                        mostrarNotificacion('Error: ' + response.message, 'danger');
+                    }
+                },
+                error: function () {
+                    mostrarNotificacion('Error al eliminar el carrito.', 'danger');
+                },
+                complete: function () {
+                    submitButton.prop('disabled', false);
+                }
+            });
+        });
+
+        function actualizarMensajeExpiracion(tiempoRestante) {
+            const minutosRestantes = Math.floor(tiempoRestante / 60);
+            const segundosRestantes = Math.floor(tiempoRestante % 60);
+
+            if (tiempoRestante > 0) {
+                $('#mensaje-expiracion').text(
+                    `La orden expira en: ${minutosRestantes} minutos y ${segundosRestantes} segundos.`);
+            } else {
+                $('#mensaje-expiracion').html('La orden ha expirado. <a href="{% url "inicio" %}" class="btn btn-info">Ver Flanes</a>');
+                $('form.remove-carrito button').prop('disabled', true); // Deshabilitar el botón de eliminar carrito
+            }
+        }
+
+        let tiempoRestante = {{ carrito.tiempo_restante }};
+        console.log("Tiempo restante:", tiempoRestante);
+
+        setInterval(function () {
+            tiempoRestante -= 1;
+            actualizarMensajeExpiracion(tiempoRestante);
+        }, 1000);
+    });
+</script>
 {% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Carrito de Compras - OnlyFlans{% endblock %}
+{% block content %}
+<div class="container">
+    <h2 class="text-center m-4">Carrito de Compras</h2>
+    <div class="card mb-4">
+        <div class="card-body text-center">
+            <p class="lead">Tu carrito está vacío.</p>
+            <p>¡Explora nuestra deliciosa variedad de flanes!</p>
+
+            <div>
+                <a href="{% url 'inicio' %}" class="btn btn-success btn-lg">Ver Flanes</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

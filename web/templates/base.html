@@ -7,16 +7,47 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- fonts awesome-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+     <!-- Favicon -->
+     <link rel="icon" href="{% static 'img/flan_ico.png' %}" type="image/x-icon">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Bootstrap CSS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta name="csrf-token" content="{{ csrf_token }}">
 
     <title>{% block title %}{% endblock %}</title>
 </head>
+<style>
+    body {
+        background-image: url("{% static 'img/bg.png' %}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+       
+    }
+    .container {
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    /* Botón flotante de WhatsApp */
+    .whatsapp-fijo {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
+    }
+
+    .whatsapp-fijo:hover {
+        opacity: 1;
+    }
+</style>
 
 <body>
     <!-- header -->
@@ -25,6 +56,13 @@
             <img src="{% static 'img/logosf.png' %}" width="350">
         </header>
     </div>
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
     <div class="container">
         <!-- navbar -->
         {% include 'partes/navbar.html' %}
@@ -32,13 +70,17 @@
     <div class="container py-1 mt-5">
         {% block content %}{% endblock %}
     </div>
-    <!-- Contenido específico de cada página -->
 
     <!-- footer -->
     <div class="container">
         {% include 'partes/footer.html' %}
     </div>
-    
+    <a href="https://wa.me/56987654321" class="whatsapp-fijo" target="_blank">
+        <div style="text-align: center; color: hsla(178, 81%, 15%, 0.685); font-weight: bold; font-size: 14px; margin-bottom: 5px;">
+            ¡Hablemos!
+        </div>
+        <img src="{% static 'img/whatsapp.png' %}" alt="WhatsApp" width="60" height="60" style="border-radius: 50%; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);">
+    </a>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/script.js' %}"></script>
 </body>

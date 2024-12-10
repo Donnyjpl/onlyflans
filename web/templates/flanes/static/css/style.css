@@ -1,0 +1,37 @@
+/* style.css */
+
+/* Estilos generales para el cuerpo y los contenedores */
+body {
+    background-color: #f0f0f0;
+    color: #333;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.valoracion {
+    color: #ffc107;
+    /* Color amarillo para las estrellas llenas */
+}
+
+.card {
+    border-radius: 10px; /* Bordes redondeados más suaves */
+}
+
+.card-body {
+    padding: 2rem; /* Más padding para un mejor espaciado */
+}
+
+.btn {
+    flex: 1 1 auto; /* Permite que los botones ocupen el espacio disponible */
+  }
+  
+  @media (max-width: 576px) {
+    .d-flex > div {
+      width: 100%; /* Asegura que ocupen el ancho completo en pantallas pequeñas */
+    }
+  }
+
+.navbar-cart {
+    margin-left: 15px; /* Espacio entre el último elemento y la imagen del carrito */
+}
