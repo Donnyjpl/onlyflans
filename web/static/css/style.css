@@ -1,0 +1,37 @@
+.navbar-toggler-icon {
+    background-image: none;
+}
+  
+.navbar-toggler-icon::before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f0c9"; /* Código del icono de Font Awesome (fa-bars) */
+    font-weight: 900;
+    font-size: 1.5rem; /* Ajusta el tamaño según tus necesidades */
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 0;
+}
+
+body {
+    font-family: "Raleway", sans-serif;
+}
+
+.carousel-indicators {
+    bottom: -30px; /* Ajusta este valor según tus necesidades */
+}
+
+.carousel-indicators [data-bs-target] {
+    width: 20px; /* Ajusta el tamaño según tus necesidades */
+    height: 20px; /* Ajusta el tamaño según tus necesidades */
+    border-radius: 50%; /* Hace que los indicadores sean circulares */
+    background-color: #92def5; /* Cambia este color al que prefieras */
+}
+
+.carousel-indicators .active {
+    background-color: #04c2fc; /* Cambia este color al que prefieras */
+}
+
+.carousel-control-prev-icon, .carousel-control-next-icon {
+    background-image: none;
+}

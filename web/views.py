@@ -33,45 +33,6 @@ from io import BytesIO
 from django.conf import settings
 import os
 
-def redimensionar_imagen(request, flan_slug):
-    # Obtener el objeto Flan con el slug proporcionado
-    flan = Flan.objects.get(slug=flan_slug)
-    
-    # URL de la imagen del Flan
-    image_url = flan.image_url  # La URL de la imagen que está almacenada en el modelo
-
-    # Descargar la imagen
-    response = requests.get(image_url)
-    
-    if response.status_code == 200:
-        # Abrir la imagen usando Pillow
-        img = Image.open(BytesIO(response.content))
-        
-        # Redimensionar la imagen (por ejemplo, 500x500 píxeles)
-        img = img.resize((500, 500))  # Cambia el tamaño según lo necesites
-
-        # Ruta para guardar la imagen redimensionada en el servidor
-        # Aquí usamos `MEDIA_ROOT` para guardar las imágenes en la carpeta de medios
-        media_path = os.path.join(settings.MEDIA_ROOT, 'imagenes', f'{flan_slug}_redimensionada.png')
-
-        # Crear la carpeta si no existe
-        os.makedirs(os.path.dirname(media_path), exist_ok=True)
-
-        # Guardar la imagen en el servidor
-        img.save(media_path)
-
-        # Ahora, puedes guardar la ruta de la imagen en tu modelo Flan o simplemente mostrarla
-        flan.image_url = media_path  # Actualizar la URL de la imagen con la ruta local
-        flan.save()  # Guardar los cambios en la base de datos
-
-        # Renderizar una página para mostrar el éxito
-        return render(request, 'flan/redimensionada.html', {'flan': flan, 'image_url': media_path})
-    else:
-        # Si la descarga falla, puedes manejar el error aquí
-        return render(request, 'error.html', {'error_message': 'No se pudo descargar la imagen.'})
-
-
-
 # Vista personalizada para solicitar el restablecimiento de contraseña
 def custom_password_reset_request(request):
     if request.method == "POST":
