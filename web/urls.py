@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from .views import bienvenido, acerca, inicio, create_flan, contacto, success, add_user, registro_exitoso, opiniones_producto, crear_opinion
-from .views import lista_mensajes, marcar_contactado, confirmacion_contacto,admin_usuario,redimensionar_imagen
+from .views import lista_mensajes, marcar_contactado, confirmacion_contacto,admin_usuario
 
 
 from .views import (
@@ -36,7 +36,6 @@ urlpatterns = [
     path('password_reset/done/', CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
     path('password_reset_confirm/<uidb64>/<token>/', CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', CustomPasswordResetCompleteView.as_view(), name='password_reset_complete'),
-    path('redimensionar_imagen/<slug:flan_slug>/', redimensionar_imagen, name='redimensionar_imagen'),
     
     path('producto/<slug:slug>/opinion/', crear_opinion, name='crear_opinion'),
     path('producto/<slug:slug>/opiniones/', opiniones_producto, name='opiniones_producto'),
